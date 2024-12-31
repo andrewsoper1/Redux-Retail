@@ -1,7 +1,7 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+const initialShopState = {
   products: [],
   cart: [],
   cartOpen: false,
@@ -9,9 +9,9 @@ const initialState = {
   currentCategory: '',
 }
 
-const slice = createSlice({
+const shopSlice = createSlice({
   name: 'shop',
-  initialState,
+  initialState: initialShopState,
   reducers: {
     updateProducts: (state,action) => {
       state.products = action.payload;
@@ -48,6 +48,48 @@ const slice = createSlice({
     }  
   },
 });
+
+const intitialAuthState = {
+  isAuthenticated: false,
+  user: null,
+  token: null,
+};
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: intitialAuthState,
+  reducers: {
+    loginSuccess: (state,action) => {
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+    },
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.token = null;
+    },
+  },
+});
+
+const initialUserState = {
+  user: null,
+};
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: initialUserState,
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    clearUser: (state) => {
+      state.user = null;
+    }
+  },
+});
+
+
 export const {
   updateProducts,
   addToCart,
@@ -58,6 +100,11 @@ export const {
   toggleCart,
   updateCategories,
   updateCurrentCategory,
-} = slice.actions;
-export default slice.reducer;
+} = shopSlice.actions;
+
+export const { loginSuccess, logout } = authSlice.actions;
+export const { setUser, clearUser } = userSlice.actions;
+export const shopReducer = shopSlice.reducer;
+export const authReducer = authSlice.reducer;
+export const userReducer = userSlice.reducer;
 
